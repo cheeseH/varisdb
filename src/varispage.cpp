@@ -6,6 +6,7 @@
  */
 #include "varispage.h"
 #include "pagewrapper.h"
+#include <string.h>
 #include <unistd.h>
 VarisPage* pageCreate(int fd,long pos,long pageSize,int& _type){
 	VarisPage* page = new VarisPage();
@@ -53,8 +54,55 @@ VarisPage VarisKPage::find(long hash){
 			return page;
 		}
 	}
+}
+
+long VarisVPage::find(long hash){
+	 VNode tmp;
+	 tmp.hash = hash;
+	 bool isEqual;
+	 VNode* node = binarySearch(vns_[0],vns_[usage_-1],tmp,isEqual,VCmp(),VEqu());
+	 if(!isEqual)
+		 return -1;
+	 else
+		 return node->datapos;
+}
+
+void VarisVPage::insert(long hash,const char* key,const char* value){
+	long datapos = shard_->insertToHeap(key,value);
+	if(usage_ == max_){
+		insertAndDevide(hash,datapos);
+	}
+	 VNode tmp;
+	 tmp.hash = hash;
+	 bool isEqual;
+	 VNode* node = binarySearch(vns_[0],vns_[usage_-1],tmp,isEqual,VCmp(),VEqu());
+	 memmove(node+1,node,(&vns_[usage_-1]-node+1)*sizeof(VNode));
+	 node->hash = hash;
+	 node->datapos = hash;
+	 flushPage();
 
 
 }
 
+void VarisVPage::insertAndDevide(long hash,long datapos){
+	size_t middle = usage_/2;
+	VNode tvn;
+	VNode tmp;
+	tmp.hash = hash;
+	bool isEqual;
+	VNode* node = binarySearch(vns_[0],vns_[usage_-1],tmp,isEqual,VCmp(),VEqu());
+	if(node == &vns_[usage_-1]){
+		tvn.hash = hash;
+		tvn.datapos = datapos;
+	}
+	else {
+			tvn = vns_[usage_-1];
+	}
+	memmove(node + 1, node , (&vns_[usage_-1] - node > 1 ? &vns_[usage_-1] - node - 1 : 0) * sizeof(VNode));
+	if(node < &vns_[usage_-1]) {
+			node->hash = hash;
+			node->datapos = datapos;
+	}
+	TmpVPage tmpvpage;
+}
 

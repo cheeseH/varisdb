@@ -34,6 +34,7 @@ public:
 	bool set(const char* key,const char* value);
 	bool update(const char* key,const char* value);
 	const char*  remove(const char* key,long hash);
+	long insertToHeap(const char* key,const char* value);
 private:
 	const char* getDataInContent(long dataPos,const char* key);
 
