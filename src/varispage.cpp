@@ -104,5 +104,6 @@ void VarisVPage::insertAndDevide(long hash,long datapos){
 			node->datapos = datapos;
 	}
 	TmpVPage tmpvpage;
+	tmpvpage.head->
 }
 
