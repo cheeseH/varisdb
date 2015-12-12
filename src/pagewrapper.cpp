@@ -36,7 +36,19 @@ VarisPage* PageWrapper::get(int pos){
 
 }
 
-void PageWrapper::release(){
+void PageWrapper::release(VarisKPage** kpage){
+	*kpage = NULL;
+	lock_.lock();
+	using_--;
+	if(using_ == 0){
+		delete page_;
+		page_ = NULL;
+	}
+	lock_.unlock();
+}
+
+void PageWrapper::release(VarisVPage** vpage){
+	*vpage = NULL;
 	lock_.lock();
 	using_--;
 	if(using_ == 0){

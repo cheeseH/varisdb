@@ -83,5 +83,8 @@ const char* VarisShard::remove(const char* key,long hash){
 			}
 }
 
+int VarisShard::getRootPos(){
+	return rootpos_;
+}
 
 

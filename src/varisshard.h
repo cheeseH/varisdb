@@ -22,6 +22,7 @@ private:
 	VarisLRUList* lrulist_;
 	size_t level_;
 	VarisPage* root_;
+	long rootpos_;
 	int idxfile_;
 	int contentflie_;
 	int freefile_;
@@ -35,8 +36,14 @@ public:
 	bool update(const char* key,const char* value);
 	const char*  remove(const char* key,long hash);
 	long insertToHeap(const char* key,const char* value);
+	void dump(TmpVPage* vapge);
+	long allocate();
+	int getRootPos();
+	void changeRoot(long pos);
+	void levelChanged(bool incred = 1);
 private:
 	const char* getDataInContent(long dataPos,const char* key);
+
 
 };
 

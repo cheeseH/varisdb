@@ -91,12 +91,14 @@ private:
 	int level_;
 	char* diskContent_;
 	PageController* parent_;
+	int idxf;
 public:
+	static size_t MAX;
 	VarisKPage(int fd,char* buf);
 	~VarisKPage();
 	VarisKPage(int fd);
 	VarisPage find(long hash);
-	void insert(long hash,long leftpos,long rightpos);
+	void insert(KNode* knode);
 private:
 	void split();
 	KNodeWrapper* knws_;
@@ -113,9 +115,14 @@ private:
 	char* diskContent_;
 	VNode* vns_;
 	VarisShard* shard_;
+	VHead* head_;
+	PageWrapper* parent_;
+	int idxf_;
 public:
+	static size_t MAX;
 	VarisVPage(int fd,long pagePos);
 	VarisVPage(int fd,char* buf);
+	VarisVPage(int fd,TmpVPage tmppage,long pos);
 	~VarisVPage();
 	long find(long hash);
 	void insert(long hash,const char* key,const char* value);

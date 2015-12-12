@@ -22,7 +22,8 @@ public:
 	PageWrapper();
 	~PageWrapper();
 	VarisPage* get(int pos);
-	void release();
+	void release(VarisKPage** kpage);
+	void release(VarisVPage** vpage);
 	void init(int fd,long pos,size_t pageSize);
 	long getPos();
 	bool initUsed();
